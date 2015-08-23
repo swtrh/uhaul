@@ -1,4 +1,4 @@
-var app = angular.module('uhaul', ['ui.router', 'ngResource']);
+var app = angular.module('uhaul', ['ui.router','ngResource']);
 
 app.config([
 '$stateProvider',
@@ -11,7 +11,7 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/home.html',
       controller: 'MainCtrl',
       resolve: {
-        postPromise: ['Resources', function(Resources){
+        orderPromise: ['Resources', function(Resources){
           return Resources.Orders.query();
         }]
       }
@@ -21,10 +21,15 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/orders.html',
       controller: 'OrdersCtrl',
       resolve: {
-        post: ['$stateParams', 'Resources', function($stateParams, Resources) {
+        order: ['$stateParams', 'Resources', function($stateParams, Resources) {
           return Resources.Orders.get($stateParams.id);
         }]
       }
+    })
+    .state('new-order', {
+      url: '/new-order',
+      templateUrl: '/new-order.html',
+      controller: 'OrdersCtrl'
     })
     // .state('login', {
     //   url: '/login',
@@ -82,28 +87,56 @@ function($stateProvider, $urlRouterProvider) {
 //   $scope.logOut = auth.logOut;
 // }]);
 
-app.controller('MainCtrl', [ '$scope', 'orders', function ($scope, orders) {
-    $scope.title = '';
-    $scope.link = '';
-    $scope.posts = posts.posts;
+app.controller('MainCtrl', [ '$scope', 'Resources', function ($scope, Resources) {
+    Resources.Orders.query().$promise.then(function (result) {
+      $scope.orders = result;
+    });
 
-    $scope.addPost = function () {
-      if (!$scope.title || $scope.title === '') {return;}
-      posts.create({
-        title: $scope.title,
-        link: $scope.link,
-        upvotes: 0,
-        comments: []
+}]);
+
+app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resources) {
+    $scope.date = new Date();
+    $scope.mover = {
+      name: '',
+      organization: ''
+    };
+
+    Resources.Locations.query().$promise.then(function (result) {
+      console.log("Populating locations", result);
+      $scope.sites = result;
+      $scope.siteCodes = [];
+      result.map(function (loc) {
+          loc.sites.forEach(function (siteCode) {
+            $scope.siteCodes.push(siteCode);
+          });
       });
-      $scope.title = '';
-      $scope.link = '';
+      console.log("Scope variables:");
+      console.log("Sites: ", $scope.sites);
+      console.log("SiteCodes: ", $scope.siteCodes);
+    });
+    
+    $scope.addOrder = function () {
+      var newOrder = new Resources.Orders({
+        registeredBy: 'Anonymous',
+        date: $scope.date,
+        type: $scope.type,
+        location: $scope.location,
+        mover: $scope.mover,
+        from: $scope.from,
+        to: $scope.to
+      });
+      if ($scope.type === "Single") {
+        newOrder.single = true;
+      }
+      newOrder.$save();
+      $scope.date = new Date();
+      $scope.mover = {
+        name: '',
+        organization: ''
+      };
     };
 
-    $scope.incrementUpvotes = function (post) {
-        posts.upvote(post);
-    };
-
-    $scope.isLoggedIn = auth.isLoggedIn;
+    
 }]);
 
 //app.factory('auth', ['$http', '$window', function($http, $window){
@@ -159,6 +192,7 @@ app.controller('MainCtrl', [ '$scope', 'orders', function ($scope, orders) {
 
 app.factory('Resources', ['$resource', function ($resource) {
   return {
-      Orders: $resource('/api/movingOrders/:id')
+      Orders: $resource('/api/movingOrders/:id'),
+      Locations: $resource('/api/locations/:id')
   };
 }]);
