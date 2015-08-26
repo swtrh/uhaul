@@ -94,12 +94,30 @@ app.controller('MainCtrl', [ '$scope', 'Resources', function ($scope, Resources)
 
 }]);
 
+function resetOrderVariables (order) {
+  if (! typeof order ===  "object") { return order };
+  order.date = new Date();
+  order.type = "single";
+  order.mover = {
+    name: '',
+    organization: ''
+  };
+  order.location = {};
+  order.from = {};
+  order.to = {};
+}
+
 app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resources) {
-    $scope.date = new Date();
-    $scope.mover = {
-      name: '',
-      organization: ''
-    };
+    //$scope.date = new Date();
+    //$scope.type = "single";
+    //$scope.mover = {
+  //    name: '',
+    //  organization: ''
+    //};
+    //$scope.location = {};
+    //$scope.from = {};
+    //$scope.to = {};
+    resetOrderVariables($scope);
 
     Resources.Locations.query().$promise.then(function (result) {
       console.log("Populating locations", result);
@@ -110,9 +128,6 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
             $scope.siteCodes.push(siteCode);
           });
       });
-      console.log("Scope variables:");
-      console.log("Sites: ", $scope.sites);
-      console.log("SiteCodes: ", $scope.siteCodes);
     });
     
     $scope.addOrder = function () {
@@ -129,11 +144,7 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
         newOrder.single = true;
       }
       newOrder.$save();
-      $scope.date = new Date();
-      $scope.mover = {
-        name: '',
-        organization: ''
-      };
+      resetOrderVariables($scope);
     };
 
     

@@ -13,14 +13,19 @@
   </head>
 
   <body ng-app="uhaul" ng-controller="MainCtrl">
-    <nav class="navbar navbar-default pull-right">
-      <ul class="nav navbar-nav">
-        <li><a href="#/new-order">New Order</a></li>
-        <!--<li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>-->
-        <!-- <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
-        <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
-        <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li> -->
-      </ul>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="/#">Home</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><form action="/#/new-order"><button class="btn btn-default navbar-btn">New Order</button></form></li>
+          <!--<li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>-->
+          <!-- <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+          <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+          <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li> -->
+        </ul>
+      </div>
     </nav>
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
