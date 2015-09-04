@@ -12,11 +12,11 @@ var router = express();
 router.use(express.bodyParser());
 
 router.get('/api/movingOrders', routes.getAllOrders);
-router.get('/api/movingOrders/:id', routes.getOrderById);
 router.post('/api/movingOrders', routes.createOrder);
+router.get('/api/movingOrders/:id', routes.getOrderById);
 router.get('/api/locations', routes.getAllLocations);
-router.get('/api/locations/:id', routes.getLocationById);
 router.post('/api/locations', routes.createLocation);
+router.get('/api/locations/:id', routes.getLocationById);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 

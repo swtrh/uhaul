@@ -18,7 +18,7 @@ function($stateProvider, $urlRouterProvider) {
     })
     .state('orders', {
       url: '/orders/{id}',
-      templateUrl: '/orders.html',
+      templateUrl: '/order.html',
       controller: 'OrdersCtrl',
       resolve: {
         order: ['$stateParams', 'Resources', function($stateParams, Resources) {
@@ -92,6 +92,20 @@ app.controller('MainCtrl', [ '$scope', 'Resources', function ($scope, Resources)
       $scope.orders = result;
     });
 
+    $scope.deleteOrder = function (order) {
+      console.log("In deleteOrder function", order);
+      //if (popupService.showPopup('Really delete this?')) {
+      order.$delete( function (err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log("Order deleted successfully");
+        $window.location.href = ''; //redirect to home
+      });
+     //}
+    };
+
 }]);
 
 function resetOrderVariables (order) {
@@ -146,7 +160,6 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
       newOrder.$save();
       resetOrderVariables($scope);
     };
-
     
 }]);
 
