@@ -122,15 +122,6 @@ function resetOrderVariables (order) {
 }
 
 app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resources) {
-    //$scope.date = new Date();
-    //$scope.type = "single";
-    //$scope.mover = {
-  //    name: '',
-    //  organization: ''
-    //};
-    //$scope.location = {};
-    //$scope.from = {};
-    //$scope.to = {};
     resetOrderVariables($scope);
 
     Resources.Locations.query().$promise.then(function (result) {
@@ -143,7 +134,7 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
           });
       });
     });
-    
+
     $scope.addOrder = function () {
       var newOrder = new Resources.Orders({
         registeredBy: 'Anonymous',
@@ -160,7 +151,7 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
       newOrder.$save();
       resetOrderVariables($scope);
     };
-    
+
 }]);
 
 //app.factory('auth', ['$http', '$window', function($http, $window){

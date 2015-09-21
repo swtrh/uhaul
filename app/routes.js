@@ -6,6 +6,15 @@ var db = monk(config.dbUrl);
 
 var movingOrders = db.get("movingOrders");
 
+var orderById = function(req,res) {
+  var id = req.params.id;
+  movingOrders.findById(id, function(err, order) {
+    if (err) res.json(500, err);
+    else if (order) res.json(order);
+    else res.send(404);
+  });
+};
+
 exports.getAllOrders = function(req,res) {
   movingOrders.find({}, function(err, orders) {
     if(err) res.json(500, err);
@@ -13,21 +22,32 @@ exports.getAllOrders = function(req,res) {
   });
 };
 
-exports.getOrderById = function(req,res) {
-  var id = req.params.id;
-  movingOrders.findById(id, function(err, order) {
-    if(err) res.json(500, err);
-    else if(order) res.json(order);
-    else res.send(404);
-  });
-};
+exports.getOrderById = orderById;
 
 exports.createOrder = function(req,res) {
   var order = req.body;
   movingOrders.insert(order, function(err, order) {
-    if(err) res.json(500, err);
+    if (err) res.json(500, err);
     else res.json(201, order);
   });
+};
+
+exports.updateOrder = function(req,res) {
+  var id = req.params.id;
+  var order = req.body;
+  movingOrders.update( id, { $set: order }, function (err) {
+    if (err) res.json(409, err);
+    orderById(req,res);
+  });
+};
+
+exports.deleteOrder = function(req,res) {
+  var id = req.params.id;
+  movingOrders.removeById(id, function (err) {
+    if (err) res.json(500, err);
+    else res.send(204);
+  });
+  //res.send(500, 'not implemented');
 };
 
 var locations = [
@@ -62,7 +82,7 @@ var locations = [
      sites: ['TR-RO']
    }
   ];
-  
+
 exports.getAllLocations = function (req, res) {
   res.send(locations);
 };
