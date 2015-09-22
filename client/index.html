@@ -8,7 +8,7 @@
     <!-- link rel="stylesheet" href="/css/bootstrap-responsive.min.css" -->
     <style>
       body { padding-top: 60px; }
-      .glyphicon-thumbs-up { cursor:pointer } 
+      .glyphicon-thumbs-up { cursor:pointer }
     </style>
   </head>
 
@@ -35,13 +35,13 @@
 
     <script type="text/ng-template" id="/home.html">
       <div class="page-header">
-        <h1>Moving orders</h1>
+        <h1>Relocation Requests</h1>
       </div>
 
       <div ng-repeat="order in orders">
         <span style="font-size:20px; margin-left:10px;">
           <a href="#/orders/{{order._id}}">
-          <span> 
+          <span>
             {{order.registeredBy}}
           </span>
           </a>
@@ -66,7 +66,10 @@
           <span>
             {{order.to.code}}
           </span>
-          
+          <span>
+            <button class="btn btn-danger" ng-click="deleteOrder(order)"
+                confirm="Do you really want to delete this order?">Delete</button>
+          </span>
         </span>
       </div>
 
@@ -80,7 +83,7 @@
         <div class="form-group">
           <input type="date"
             class="form-control"
-            placeholder="yyyy-MM-dd" 
+            placeholder="yyyy-MM-dd"
             ng-model="date"></input>
         </div>
         <div class="form-group">
@@ -95,7 +98,7 @@
         </div>
         <div class="form-group">
           <label for="locationSelect">Location: </label><br>
-          <select name="locationSelect" 
+          <select name="locationSelect"
             ng-model="location"
             ng-options="loc.name for loc in sites track by loc.name"></select>
         </div>
@@ -113,13 +116,13 @@
         </div>
         <div class="form-group">
           <label for="fromLocation">Moving from: </label><br>
-          <select name="fromLocation" 
+          <select name="fromLocation"
             ng-model="from.code"
             ng-options="code for code in siteCodes track by code"></select>
         </div>
         <div class="form-group col.md-offset-6">
           <label for="toLocation">Moving to: </label><br>
-          <select name="toLocation" 
+          <select name="toLocation"
             ng-model="to.code"
             ng-options="code for code in siteCodes track by code"></select>
         </div>
@@ -166,14 +169,12 @@
       </div>
     </script>
 
- 
-
-
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-resource.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
     <script src="/js/app.js"></script>
   </body>
 </html>

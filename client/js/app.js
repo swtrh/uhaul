@@ -1,4 +1,4 @@
-var app = angular.module('uhaul', ['ui.router','ngResource']);
+var app = angular.module('uhaul', ['ui.router', 'ui.bootstrap','ngResource']);
 
 app.config([
 '$stateProvider',
@@ -88,22 +88,21 @@ function($stateProvider, $urlRouterProvider) {
 // }]);
 
 app.controller('MainCtrl', [ '$scope', 'Resources', function ($scope, Resources) {
-    Resources.Orders.query().$promise.then(function (result) {
-      $scope.orders = result;
-    });
+    var getAllOrders = function () {
+      Resources.Orders.query().$promise.then(function (result) {
+        $scope.orders = result;
+      });
+    };
+
+    getAllOrders();
 
     $scope.deleteOrder = function (order) {
       console.log("In deleteOrder function", order);
       //if (popupService.showPopup('Really delete this?')) {
-      order.$delete( function (err) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("Order deleted successfully");
-        $window.location.href = ''; //redirect to home
-      });
-     //}
+        Resources.Orders.delete({ id: order._id }).$promise.then(function (result) {
+          getAllOrders();
+        });
+      //}
     };
 
 }]);
@@ -153,6 +152,24 @@ app.controller('OrdersCtrl', [ '$scope', 'Resources', function ($scope, Resource
     };
 
 }]);
+
+app.directive('ngConfirmClick', [
+  function(){
+    return {
+      priority: -1,
+      restrict: 'A',
+      link: function(scope, element, attrs){
+        element.bind('click', function(e){
+          var message = attrs.ngConfirmClick;
+          if(message && !confirm(message)){
+            e.stopImmediatePropagation();
+            e.preventDefault();
+          }
+        });
+      }
+    }
+  }
+]);
 
 //app.factory('auth', ['$http', '$window', function($http, $window){
 //  var auth = {};

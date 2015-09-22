@@ -43,6 +43,7 @@ exports.updateOrder = function(req,res) {
 
 exports.deleteOrder = function(req,res) {
   var id = req.params.id;
+  console.log("Delete order", id);
   movingOrders.removeById(id, function (err) {
     if (err) res.json(500, err);
     else res.send(204);
