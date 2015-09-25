@@ -37,7 +37,7 @@ exports.getAllLocations = function (req, res) {
 
 exports.getLocationById = function (req, res) {
   var id = req.params.id;
-  res.send(locations.filter(function (location) { return location.name===id }));
+  res.send(locations.filter(function (location) { return location.name===id })[0]);
 };
 
 exports.createLocation = function (req, res) {
