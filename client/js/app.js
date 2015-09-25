@@ -224,7 +224,7 @@ app.directive('ngConfirmClick', [
 
 app.factory('Resources', ['$resource', function ($resource) {
   return {
-      Orders: $resource('/api/movingOrders/:id'),
+      Orders: $resource('/api/relocationRequest/:id'),
       Locations: $resource('/api/locations/:id')
   };
 }]);

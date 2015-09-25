@@ -7,7 +7,7 @@
   "author": "Jørn Ølmheim <jorn@olmheim.com>",
   "scripts": {
     "start": "NODE_ENV=development nodemon ./server.js",
-    "test": "NODE_ENV=development mocha ./test/express.test.js"
+    "test": "NODE_ENV=development mocha ./test/*.js"
   },
   "dependencies": {
     "angular-bootstrap": "^0.12.2",

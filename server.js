@@ -2,7 +2,8 @@
 var http = require('http');
 var path = require('path');
 var express = require('express');
-var routes = require("./app/routes.js");
+var relocationRequestService = require("./app/relocationRequestService.js");
+var locationService = require("./app/locationService.js");
 var config = require("./app/config.js");
 var mongoose = require('mongoose');
 
@@ -13,14 +14,14 @@ mongoose.connect('mongodb://localhost/request');
 var router = express();
 router.use(express.bodyParser());
 
-router.get('/api/relocationRequest', routes.getAllRequests);
-router.post('/api/relocationRequest', routes.createRequest);
-router.get('/api/relocationRequest/:id', routes.getRequestById);
-router.put('/api/relocationRequest/:id', routes.updateRequest);
-router.delete('/api/relocationRequest/:id', routes.deleteRequest);
-router.get('/api/locations', routes.getAllLocations);
-router.post('/api/locations', routes.createLocation);
-router.get('/api/locations/:id', routes.getLocationById);
+router.get('/api/relocationRequest', relocationRequestService.getAllRequests);
+router.post('/api/relocationRequest', relocationRequestService.createRequest);
+router.get('/api/relocationRequest/:id', relocationRequestService.getRequestById);
+router.put('/api/relocationRequest/:id', relocationRequestService.updateRequest);
+router.delete('/api/relocationRequest/:id', relocationRequestService.deleteRequest);
+router.get('/api/locations', locationService.getAllLocations);
+router.post('/api/locations', locationService.createLocation);
+router.get('/api/locations/:id', locationService.getLocationById);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 
