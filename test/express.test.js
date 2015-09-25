@@ -1,32 +1,33 @@
 var superagent = require('superagent');
 var expect = require('expect.js');
 
-describe ('express rest api server', function () {
-  var request_url = 'http://localhost:3000/api/movingOrders';
+
+describe ('relocation request api', function () {
+  var request_url = 'http://localhost:3000/api/relocationRequest';
   var id;
 
-  it ('posts an order', function (done) {
+  it ('posts a relocation request', function (done) {
     superagent.post(request_url)
       .send({
-        "registeredBy": "Anonymous",
-        "date": new Date(),
-        "type": "single",
-        "location": {
-          "name": "Trondheim",
-          "sites": [
-            "TR-RO"
-          ]
+        requestor: {
+          employeenumber: '633739',
+          name: 'Jørn Ølmheim',
+          department: 'ITV DRS RTS',
+          phone: '+4799165627',
+          email: 'joe@statoil.com'
         },
-        "mover": {
-          "name": "Jørn Ølmheim",
-          "organization": "ITV DRS RTS"
+        from: {
+          code: "TR-RO",
+          block_floor: "3.3",
+          workspace: "3.3.450B"
         },
-        "from": {
-          "code": "TR-RO"
+        to: {
+          code: "TR-RO",
+          block_floor: "3.3",
+          workspace: "3.3.451B",
+          new_department: ""
         },
-        "to": {
-          "code": "TR-RO"
-        }
+        comment: "Testing"
       })
       .end(function (e, res) {
         //console.log(res);
@@ -38,7 +39,7 @@ describe ('express rest api server', function () {
       });
   });
 
-  it ('retrieves an order', function (done) {
+  it ('retrieves a relocation request', function (done) {
     superagent.get(request_url + '/' + id)
       .end(function (e, res) {
         expect(e).to.eql(null);
@@ -50,10 +51,9 @@ describe ('express rest api server', function () {
       });
   });
 
-  it ('retrieves a collection of orders', function (done) {
+  it ('retrieves a collection of relocation requests', function (done) {
     superagent.get(request_url)
       .end(function (e, res) {
-        // console.log(res.body)
         expect(e).to.eql(null);
         expect(res.status).to.eql(200);
         expect(res.body.length).to.be.above(0);
@@ -62,32 +62,29 @@ describe ('express rest api server', function () {
       });
   });
 
-  it  ('updates an order', function (done) {
+  it  ('updates a relocation request', function (done) {
     superagent.put(request_url + '/' + id)
-      .send({
-        "registeredBy": "Anonymous",
-        "date": new Date(),
-        "type": "single",
-        "location": {
-        "name": "Trondheim",
-          "sites": [
-            "TR-RO"
-          ]
+      .send({requestor: {
+        employeenumber: '633739',
+          name: 'Jørn Ølmheim',
+          department: 'ITV DRS RTS',
+          phone: '+4799165627',
+          email: 'joe@statoil.com'
         },
-        "mover": {
-          "name": "Arve Skogvold",
-          "organization": "ITV DIS RD"
+        from: {
+          code: "TR-RO",
+          block_floor: "3.3",
+          workspace: "3.3.450B"
         },
-        "from": {
-          "code": "TR-RO"
+        to: {
+          code: "TR-RO",
+          block_floor: "3.3",
+          workspace: "3.3.451B",
+          new_department: ""
         },
-        "to": {
-          "code": "TR-RO"
-        }
+        comment: "Updated with new info"
       })
       .end(function (e, res) {
-        //console.log(e);
-        //console.log(res.body);
         expect(e).to.eql(null);
         expect(res.status).to.eql(200);
         expect(res.body._id.length).to.eql(24);
@@ -96,25 +93,22 @@ describe ('express rest api server', function () {
       });
     });
 
-    it ('checks an updated object', function (done) {
+    it ('checks an updated request', function (done) {
       superagent.get(request_url + '/' + id)
         .end(function (e, res) {
-          // console.log(res.body)
           expect(e).to.eql(null);
           expect(res.status).to.eql(200);
           expect(typeof res.body).to.eql('object');
           expect(res.body._id.length).to.eql(24);
           expect(res.body._id).to.eql(id);
-          expect(res.body.mover.name).to.eql('Arve Skogvold');
+          expect(res.body.comment).to.eql('Updated with new info');
           done();
         });
     });
 
-    it ('removes an order', function (done) {
+    it ('removes a request', function (done) {
       superagent.del(request_url + '/' +id)
         .end(function (e, res) {
-          //console.log(e);
-          // console.log(res.body)
           expect(e).to.eql(null);
           expect(res.status).to.eql(204);
           superagent.get(request_url + '/' + id)

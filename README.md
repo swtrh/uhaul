@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # uhaul
 Statoil Moving orders for IT Equipment
 =======
@@ -11,4 +10,3 @@ Statoil Moving orders for IT Equipment
  * ./mongod &
  * node server.js
 
->>>>>>> be0ff3fa8f79e8f6c8804c475bbf85368994f372

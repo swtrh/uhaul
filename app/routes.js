@@ -1,54 +1,54 @@
-var monk = require("monk");
+var mongoose = require('mongoose');
+
+var RelocationRequest = require('../models/RelocationRequest');
+var Employee = require('../models/Employee');
+var Equipment = require('../models/Equipment');
 
 var config = require("./config.js");
 
-var db = monk(config.dbUrl);
-
-var movingOrders = db.get("movingOrders");
-
-var orderById = function(req,res) {
+var requestById = function(req,res) {
   var id = req.params.id;
-  movingOrders.findById(id, function(err, order) {
+  RelocationRequest.findById(id, function(err, request) {
     if (err) res.json(500, err);
-    else if (order) res.json(order);
+    else if (request) res.json(request);
     else res.send(404);
   });
 };
 
-exports.getAllOrders = function(req,res) {
-  movingOrders.find({}, function(err, orders) {
+exports.getAllRequests = function(req,res) {
+  RelocationRequest.find({}, function(err, requests) {
     if(err) res.json(500, err);
-    else res.json(orders);
+    else res.json(requests);
   });
 };
+//
+exports.getRequestById = requestById;
 
-exports.getOrderById = orderById;
-
-exports.createOrder = function(req,res) {
-  var order = req.body;
-  movingOrders.insert(order, function(err, order) {
+exports.createRequest = function(req,res) {
+  var request = req.body;
+  //console.log(RelocationRequest);
+  var relocationRequest = new RelocationRequest(request);
+  relocationRequest.save(function(err, request) {
     if (err) res.json(500, err);
-    else res.json(201, order);
+    else res.json(201, request);
   });
 };
 
-exports.updateOrder = function(req,res) {
+exports.updateRequest = function(req,res) {
   var id = req.params.id;
-  var order = req.body;
-  movingOrders.update( id, { $set: order }, function (err) {
+  var request = req.body;
+  RelocationRequest.findByIdAndUpdate( id, { $set: request }, function (err) {
     if (err) res.json(409, err);
-    orderById(req,res);
+    requestById(req,res);
   });
 };
 
-exports.deleteOrder = function(req,res) {
+exports.deleteRequest = function(req,res) {
   var id = req.params.id;
-  console.log("Delete order", id);
-  movingOrders.removeById(id, function (err) {
+  RelocationRequest.findByIdAndRemove(id, function (err) {
     if (err) res.json(500, err);
     else res.send(204);
   });
-  //res.send(500, 'not implemented');
 };
 
 var locations = [

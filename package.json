@@ -14,8 +14,7 @@
     "angular-confirm": "^1.1.0",
     "express": "~3.2.4",
     "mongodb": "^2.0.42",
-    "monk": "^1.0.1",
-    "socket.io": "~0.9.14"
+    "mongoose": "^4.1.8"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
